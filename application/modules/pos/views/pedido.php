@@ -16,6 +16,7 @@
 <?php echo form_close();?>
 <div style="clear: both;">&nbsp;</div>
 <div class="post">
+  <div id="articuloAjax"></div>
   <div id="movimientos"></div>
 </div>
 
@@ -36,6 +37,22 @@ $(document).ready(function(){
   $("#Agregar").click(function(){
     Agrego.submit();
   });
+  /*
+   * Verifico los focos
+   */
+  Cantidad.blur(function(){
+    Cantidad.removeClass('focus');
+  });
+  Cantidad.focus(function(){
+    Cantidad.addClass('focus');
+  });
+  Articulo.blur(function(){
+    Articulo.removeClass('focus');
+  });
+  Articulo.focus(function(){
+    Articulo.addClass('focus');
+  });
+
   //chequeo las teclas de funciones
   $(document).bind('keydown',function(e){
     var code = e.keyCode;
@@ -54,21 +71,39 @@ $(document).ready(function(){
           Cantidad.removeClass('focus');
           CambioSucursal();
           break;
-        case 'f8':
-          CambioCondicion();
-          break;
-        case 'f9':
-          ImprimoDescuento();
-          break;
         case 'f12':
           ImprimoTicket();
           break;
       }
     }else{
-      articuloTXT = Articulo.val().trim();
-      if(code == 13 && articuloTXT ==''&& Articulo.hasClass('focus')==true ){
-        ConsultoArticulo();
-      };
+      if(code==13){
+        var bandera = true;
+        cantidadTXT = Cantidad.val().trim();
+        articuloTXT = Articulo.val().trim();
+        if(cantidadTXT ==''){
+          if(Cantidad.hasClass('focus')==true && bandera){
+            alert('Se debe Ingresar una cantidad');
+            bandera = false;
+          }
+        }else{
+          if(Cantidad.hasClass('focus')==true && bandera ){
+            Cantidad.blur();
+            Articulo.focus();
+            bandera = false;
+          };                  
+        }        
+        if(articuloTXT ==''){
+          if(Articulo.hasClass('focus')==true && bandera ){
+            ConsultoArticulo();
+            bandera = false;
+          };
+        }else{
+          if(Articulo.hasClass('focus')==true && bandera ){
+            bandera = false;
+            Agrego.submit();
+          };
+        }
+      }
     };
   });
   // fin de chequeo de teclas de funciones
@@ -116,25 +151,26 @@ function getSpecialKey(code){
     return false;
   }
 }
-function ConsultoPrecio(){
-  var dialogOpts = {
+function ConsultoArticulo(){
+  var urlConsulta = <?php echo "'".base_url()."/index.php/articulos/consultaPos'"?>;
+  var dialogOpts  = {
         modal: true,
         bgiframe: true,
         autoOpen: false,
         height: 300,
         width: 500,
-        title: "Consulta de Precios",
+        title: "Consulta de Articulos",
         draggable: true,
         resizeable: true,
         close: function(){
-          $('#precio').dialog("destroy");
-          $("#codigobarra").addClass('focus');
-          $("#codigobarra").focus();
+          $('#articuloAjax').dialog("destroy");
+          $("#articulo").addClass('focus');
+          $("#articulo").focus();
         }
      };
-  $("#precio").dialog(dialogOpts);   //end dialog
-  $("#precio").load($("#paginaPrecio").val(), [], function(){
-                 $("#precio").dialog("open");
+  $("#articuloAjax").dialog(dialogOpts);   //end dialog
+  $("#articuloAjax").load(urlConsulta, [], function(){
+                 $("#articuloAjax").dialog("open");
               }
            );
 }

@@ -1,16 +1,16 @@
-<table>
+<table width="95%" align="center" class="tableResult">
   <thead>
     <tr>
-      <td>Cant.</td>
-      <td colspan="2">Articulo</td>
-      <td>Precio Unit.</td>
-      <td>Importe</td>
+      <th>Cant.</th>
+      <th colspan="2">Articulo</th>
+      <th>Precio Unit.</th>
+      <th>Importe</th>
     </tr>
   </thead>
 <?php $total=0;?>
 <?php foreach($articulos as $arti):?>
-<tr>
-  <td><?php echo $arti->cantidad?></td>
+<tr >
+  <td ><?php echo $arti->cantidad?></td>
   <td><?php echo $arti->articulo_id?></td>
   <td><?php echo $arti->articulo_nombre?></td>
   <td><?php echo $arti->articulo_precio?></td>
@@ -18,7 +18,7 @@
 </tr>  
 <?php $total += $arti->importe?>
 <?php endforeach; ?>
-<tr>
-  <td colspan="4">Total</td><td><?php echo $total?></td>
+<tr class="importe">
+  <th colspan="4">Total</th><th><?php echo $total?></th>
 </tr>
 </table>

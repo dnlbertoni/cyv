@@ -42,6 +42,7 @@ class Pos extends MY_Controller{
     $data['paginaDet']="'".base_url().'/index.php/pos/muestroDetalle'."'";
     $data['paginaDel']="'".base_url().'/index.php/pos/vacioTMP'."'";
     $data['ocultos']=array('fecha'=>$fechoy->format(" d/m/Y"));
+    Template::set_block('novedades', 'pos/_novPedidos');
     Template::set($data);
     Template::render();
   }
