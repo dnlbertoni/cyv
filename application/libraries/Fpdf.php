@@ -5,9 +5,10 @@
 * Version: 1.6                                 *
 * Date: 2008-08-03                              *
 * Author:  Olivier PLATHEY                           *
+* Tiene incluido el AutoPrint * 
 *******************************************************************************/
 define('FPDF_VERSION','1.6');
-class Pdf{
+class Fpdf{
 var $page;         //current page number
 var $n;         //current object number
 var $offsets;     //array of object offsets
@@ -1551,8 +1552,7 @@ function _putresourcedict()
   $this->_putxobjectdict();
   $this->_out('>>');
 }
-function _putresources()
-{
+function _putresources(){
   $this->_putfonts();
   $this->_putimages();
   //Resource dictionary
@@ -1562,6 +1562,9 @@ function _putresources()
   $this->_putresourcedict();
   $this->_out('>>');
   $this->_out('endobj');
+  if (!empty($this->javascript)) {
+    $this->_putjavascript();
+  }
 }
 function _putinfo()
 {
@@ -1596,6 +1599,9 @@ function _putcatalog()
     $this->_out('/PageLayout /OneColumn');
   elseif($this->LayoutMode=='two')
     $this->_out('/PageLayout /TwoColumnLeft');
+  if (isset($this->javascript)) {
+      $this->_out('/Names <</JavaScript '.($this->n_js).' 0 R>>');
+  }
 }
 function _putheader()
 {
@@ -1646,56 +1652,95 @@ function _enddoc()
  * Modificado para que Imprima una cuadricula
  */
 
- function Cuadricula($letra=14, $Izq=0, $Der=0, $Sup=0, $Inf=0){
-  $this->SetFont('Arial','',$letra);
-  $this->SetDrawColor(128,0,0);
-  $this->SetMargins($Izq,$Sup,$Der);
-  $this->SetAutoPageBreak(true,$Inf);
-  $this->AddPage();
-  for($r=0;$r<29;$r++)
-  {
-    for($c=0;$c<21;$c++)
-      $this->Cell(10,10,'',1);
-    $this->Ln();
-  }
-    function IncludeJS($script) {
-        $this->javascript=$script;
-    }
-    function _putjavascript() {
-        $this->_newobj();
-        $this->n_js=$this->n;
-        $this->_out('<<');
-        $this->_out('/Names [(EmbeddedJS) '.($this->n+1).' 0 R ]');
-        $this->_out('>>');
-        $this->_out('endobj');
-        $this->_newobj();
-        $this->_out('<<');
-        $this->_out('/S /JavaScript');
-        $this->_out('/JS '.$this->_textstring($this->javascript));
-        $this->_out('>>');
-        $this->_out('endobj');
-    }
-    function _putresources() {
-        parent::_putresources();
-        if (!empty($this->javascript)) {
-            $this->_putjavascript();
-        }
-    }
-    function _putcatalog() {
-        parent::_putcatalog();
-        if (isset($this->javascript)) {
-            $this->_out('/Names <</JavaScript '.($this->n_js).' 0 R>>');
-        }
-    }
-    function AutoPrint($dialog=false){
-        //Embed some JavaScript to show the print dialog or start printing immediately
-        $param=($dialog ? 'true' : 'false');
-        $script="print($param);";
-        $this->IncludeJS($script);
-    }  
- }
+function IncludeJS($script) {
+    $this->javascript=$script;
+}
 
+function _putjavascript() {
+    $this->_newobj();
+    $this->n_js=$this->n;
+    $this->_out('<<');
+    $this->_out('/Names [(EmbeddedJS) '.($this->n+1).' 0 R ]');
+    $this->_out('>>');
+    $this->_out('endobj');
+    $this->_newobj();
+    $this->_out('<<');
+    $this->_out('/S /JavaScript');
+    $this->_out('/JS '.$this->_textstring($this->javascript));
+    $this->_out('>>');
+    $this->_out('endobj');
+}
+
+function Cuadricula($letra=14, $Izq=0, $Der=0, $Sup=0, $Inf=0){
+$this->SetFont('Arial','',$letra);
+$this->SetDrawColor(128,0,0);
+$this->SetMargins($Izq,$Sup,$Der);
+$this->SetAutoPageBreak(true,$Inf);
+$this->AddPage();
+for($r=0;$r<29;$r++)
+{
+  for($c=0;$c<21;$c++)
+    $this->Cell(10,10,'',1);
+  $this->Ln();
+}
+  function IncludeJS($script) {
+      $this->javascript=$script;
+  }
+  function _putjavascript() {
+      $this->_newobj();
+      $this->n_js=$this->n;
+      $this->_out('<<');
+      $this->_out('/Names [(EmbeddedJS) '.($this->n+1).' 0 R ]');
+      $this->_out('>>');
+      $this->_out('endobj');
+      $this->_newobj();
+      $this->_out('<<');
+      $this->_out('/S /JavaScript');
+      $this->_out('/JS '.$this->_textstring($this->javascript));
+      $this->_out('>>');
+      $this->_out('endobj');
+  }
+  function _putresources() {
+      parent::_putresources();
+      if (!empty($this->javascript)) {
+          $this->_putjavascript();
+      }
+  }
+  function _putcatalog() {
+      parent::_putcatalog();
+      if (isset($this->javascript)) {
+          $this->_out('/Names <</JavaScript '.($this->n_js).' 0 R>>');
+      }
+  }
+  function AutoPrint($dialog=false){
+      //Embed some JavaScript to show the print dialog or start printing immediately
+      $param=($dialog ? 'true' : 'false');
+      $script="print($param);";
+      $this->IncludeJS($script);
+  }  
+}
+
+function AutoPrint($dialog=false){ 
+//Abre Automaticamente el menu de impresion
+$param=($dialog ? 'true' : 'false'); 
+$script="print($param);"; 
+$this->IncludeJS($script); 
+} 
+
+function AutoPrintToPrinter($server, $printer, $dialog=false){ 
+//Print on a shared printer (requires at least Acrobat 6) 
+$script = "var pp = getPrintParams();"; 
+if($dialog) 
+ $script .= "pp.interactive = pp.constants.interactionLevel.full;"; 
+else 
+ $script .= "pp.interactive = pp.constants.interactionLevel.automatic;"; 
+$script .= "pp.printerName = '\\\\\\\\".$server."\\\\".$printer."';"; 
+$script .= "print(pp);"; 
+$this->IncludeJS($script); 
+}  
+ 
 //End of class
+ 
 }
 //Handle special IE contype request
 if(isset($_SERVER['HTTP_USER_AGENT']) && $_SERVER['HTTP_USER_AGENT']=='contype')
@@ -1703,5 +1748,3 @@ if(isset($_SERVER['HTTP_USER_AGENT']) && $_SERVER['HTTP_USER_AGENT']=='contype')
   header('Content-Type: application/pdf');
   exit;
 }
-
-?>

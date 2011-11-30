@@ -15,6 +15,8 @@
   <div id="Agregar">Agregar</div>
 <?php echo form_close();?>
 <div style="clear: both;">&nbsp;</div>
+<div id="imprimo"></div>
+<div id="carga" ><img src="<?php echo base_url()."themes/cacao/images/loading.gif"?>" /></div>
 <div class="post">
   <div id="articuloAjax"></div>
   <div id="movimientos"></div>
@@ -23,8 +25,8 @@
 <script>
 $(document).ready(function(){
   muestroDetalles();
-  $("#loading").css('text-align', 'center');
-  $("#loading").hide();
+  $("#carga").css('text-align', 'center');
+  $("#carga").hide();
   $("#cuentaAjax").hide();
   $("#Agregar").button({icons:{primary:'ui-icon-circle-plus'}});
   var Cantidad = $("#addCart #cantidad");
@@ -133,7 +135,7 @@ function AgregoArticulo(e){
                   }),
             dataType: "html",
             async:false,
-            beforeSend: function(){$("#loading").fadeIn();},
+            beforeSend: function(){$("#carga").fadeIn();},
             success: function(msg){
                $("#movimientos").html(msg);
                $("#cantidad").val('');
@@ -242,7 +244,7 @@ function CambioCliente(){
            );
 }
 function ImprimoTicket(){
-  var url = $("#paginaTicket").val() + '/' + $("#tipcom_id").val() + '/' + $("#condVtaId").val();
+  var url = <?php echo "'".base_url()."index.php/pos/imprimoComprobante/$puesto/$sucId"."'";?>;
   var dialogOpts = {
         modal: true,
         bgiframe: true,
@@ -255,7 +257,7 @@ function ImprimoTicket(){
         draggable: true,
         resizeable: true,
         close: function(){
-          window.location = $("#paginaIndex").val();}
+          window.location = <?php echo "'".base_url()."index.php/pos/"."'";?>;}
   };
   $("#imprimo").dialog(dialogOpts);   //end dialog
   $("#imprimo").load(url, [], function(){

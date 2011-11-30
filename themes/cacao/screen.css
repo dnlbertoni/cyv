@@ -257,6 +257,10 @@ a:hover {
 	font-weight: bold;
 }
 
+table th {
+  background-color: #FE7805;
+  color: #FFF;
+}
 /* Sidebar */
 
 #sidebar {
@@ -371,4 +375,17 @@ a:hover {
 .focus{
   background-color: #e78f08;
   color: #FFF;
+}
+
+.tableResult {
+  border-color: #FE7805;
+  border-style: solid;
+  border-width: 2px;
+}
+.tableResult tr{
+  background-color: #e78f08;
+  color:#fff;
+}
+.tableResult{
+  background-color: transparent;
 }

@@ -74,5 +74,11 @@ class Pos extends MY_Controller{
     $data['articulos']=array();
     $this->load->view('pos/movimientos', $data);
   }
+  function imprimoComprobante($puesto=false, $sucursal=false){
+    $dataPOST['puesto']=$puesto;
+    $dataPOST['sucursal']=$sucursal;
+    $dataPOST['pagina']="'".  base_url()."index.php/pos/pdf/imprimoComprobante"."'";
+    $this->load->view('pos/muestroImprimo', $dataPOST);
+  }
 }
 
