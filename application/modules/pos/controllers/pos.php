@@ -17,7 +17,10 @@ class Pos extends MY_Controller{
     parent::__construct();
 
     $this->puesto = PUESTO;
+    $this->load->model('Articulos_model');
     $this->load->model('Sucursales_model');
+    $this->load->model('Numerador_model');
+    $this->load->model('Tmpmovim_model');
   }
   /**
    * Pantalla de inicio de facturacion
@@ -34,7 +37,7 @@ class Pos extends MY_Controller{
     $suc=$this->Sucursales_model->getById($sucId);
     $data['sucursal']="$suc->nombre";
     $data['sucId']=$sucId;
-    $numero =2;
+    $numero =$this->Numerador_model->getNextRemito($this->puesto);
     $data['comprobante']=sprintf("%04.0f-%08.0f", $this->puesto, $numero);
     $data['puesto']=$this->puesto;
     $data['numero']=$numero;
@@ -47,38 +50,59 @@ class Pos extends MY_Controller{
     Template::render();
   }
   function addArticulo(){
-    $this->load->model('Articulos_model');
-    $this->load->model('Tmpmovim_model');
     $articulo = $this->Articulos_model->getById($this->input->post('articulo'));
-    $datos['puesto']=$this->input->post('puesto');
+    $datos['puesto']  =$this->input->post('puesto');
     $datos['sucursal']=$this->input->post('sucursal');
+    $datos['numero']  =$this->input->post('numero');
     $datos['cantidad']=$this->input->post('cantidad')*$articulo->kg;
     $datos['articulo']=$this->input->post('articulo');
     $datos['precio']=$articulo->precio;
     $id=$this->Tmpmovim_model->add($datos);
-    $this->muestroDetalle($this->input->post('puesto'),$this->input->post('sucursal'));
+    $this->muestroDetalle($this->input->post('puesto'),$this->input->post('numero'),$this->input->post('sucursal'));
   }
-  function muestroDetalle($puesto=false, $sucursal=false){
+  function muestroDetalle($puesto=false, $numero=false,$sucursal=false){
     $puesto=($puesto)?$puesto:$this->input->post('puesto');
+    $numero=($numero)?$numero:$this->input->post('numero');
     $sucursal=($sucursal)?$sucursal:$this->input->post('sucursal');
     $this->load->model('Tmpmovim_model');
-    $articulos=$this->Tmpmovim_model->getDetalle($puesto,$sucursal);
+    $articulos=$this->Tmpmovim_model->getDetalle($puesto,$numero,$sucursal);
     $data['articulos']=$articulos;
     $this->load->view('pos/movimientos', $data);
   }
-  function vacioTMP($puesto=false,$sucursal=false){
+  function vacioTMP($puesto=false,$numero=false, $sucursal=false){
     $puesto=($puesto)?$puesto:$this->input->post('puesto');
+    $numero=($numero)?$numero:$this->input->post('numero');
     $sucursal=($sucursal)?$sucursal:$this->input->post('sucursal');
-    $this->load->model('Tmpmovim_model');
-    $articulos=$this->Tmpmovim_model->vacioTemporal($puesto,$sucursal);
+
+    $articulos=$this->Tmpmovim_model->vacioTemporal($puesto,$numero,$sucursal);
     $data['articulos']=array();
     $this->load->view('pos/movimientos', $data);
   }
-  function imprimoComprobante($puesto=false, $sucursal=false){
-    $dataPOST['puesto']=$puesto;
-    $dataPOST['sucursal']=$sucursal;
-    $dataPOST['pagina']="'".  base_url()."index.php/pos/pdf/imprimoComprobante"."'";
-    $this->load->view('pos/muestroImprimo', $dataPOST);
+  function imprimoComprobante($puesto=false, $numero=false,$sucursal=false){
+    $articulos=$this->Tmpmovim_model->toSave($puesto, $numero, $sucursal);
+    $datosEncab = array('tipcom'=>1,
+                        'puesto'=>$puesto,
+                        'numero'=>$numero,
+                        'letra'=>'X',
+                        'sucursal_id'=>$sucursal,
+                        'importe'=>$importe,
+                        'estado'=>1
+                        );
+    $idencab = $this->Facencab_model->add($datos);
+    foreach($articulos as $articulo){
+    $datosMovim[]= array( 'facencab_id' => $idencab,
+                          'articulo_id' => $articulo->articulo_id,
+                          'cantidad'    => $articulo->articulo_precio,
+                          'costo'       => $articulo->articulo_costo,
+                          'tasaiva'     => 1
+                        );
+    }
+    if($this->Facmovim_model->add($datosMovim)){
+      $this->Tmpmovim_model->vacioTemporal($puesto,$numero,$sucursal);
+      redirect('pos/pdf/imprimoComprobante/'.$idencab);
+    }else{
+      echo 'Error al grabar el comprobante';
+    };
   }
 }
 

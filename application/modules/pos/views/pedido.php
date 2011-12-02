@@ -180,6 +180,7 @@ function CanceloComprobante(){
     $("#cuenta").val(1);
     puesto       = $("#puesto").val();
     sucursal     = $("#sucursal").val();
+    numero       = $("#numero").val();
     pagina       = <?php echo $paginaDel?>;
     $.ajax({
             url: pagina,
@@ -188,6 +189,7 @@ function CanceloComprobante(){
             type: "POST",
             data: ({
                     puesto : puesto,
+                    numero : numero,
                     sucursal : sucursal
                   }),
             dataType: "html",
@@ -244,15 +246,16 @@ function CambioCliente(){
            );
 }
 function ImprimoTicket(){
-  var url = <?php echo "'".base_url()."index.php/pos/imprimoComprobante/$puesto/$sucId"."'";?>;
+  var url = <?php echo "'".base_url()."index.php/pos/imprimoComprobante/$puesto/$numero/$sucId"."'";?>;
+  /*
   var dialogOpts = {
         modal: true,
         bgiframe: true,
         autoOpen: false,
         hide: "explode",
         open: function(){$("#carga").fadeIn();},
-        height: 200,
-        width: 300,
+        //height: 200,
+        //width: 300,
         title: "Imprimo Comprobante",
         draggable: true,
         resizeable: true,
@@ -264,6 +267,9 @@ function ImprimoTicket(){
                  $("#imprimo").dialog("moveToTop");
                  $("#imprimo").dialog("open");
               });
+ */
+ window.open(url,"_blank");
+ window.location = <?php echo "'".base_url()."index.php/pos/"."'";?>;
 }
 function muestroDetalles(){
     puesto       = $("#puesto").val();

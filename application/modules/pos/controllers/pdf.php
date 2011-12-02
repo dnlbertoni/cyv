@@ -14,18 +14,58 @@ class Pdf extends MY_Controller{
     $sucursal=($sucursal)?$sucursal:$this->input->post('sucursal');
     $this->load->model('Tmpmovim_model');
     $articulos=$this->Tmpmovim_model->getDetalle($puesto,$sucursal);
-    $data['articulos']=$articulos;
     $this->fpdf->Open();
-    $this->fpdf->SetMargins(0,0,0);
+    $this->fpdf->SetMargins(30,0,0);
     $this->fpdf->SetAutoPageBreak(true);
     $this->fpdf->SetDrawColor(128);
-    $this->fpdf->SetTopMargin(-80);    
-    $this->fpdf->AddPage('P',array(75,215));
-    $this->fpdf->SetFont('Times','', 12);    
-    $this->fpdf->SetXY(0,0);    
-    for($i=0;$i<40;$i++){
-        $this->fpdf->Cell(10,10,'prueba  ' .$i,0,1,'J');
-    }
+    $this->fpdf->SetFillColor(128);
+    $this->fpdf->SetTopMargin(5);    
+    $renglon=0;
+    $hoja=1;
+    $hojaAux=0;
+    $total=0;
+    $canFin = count($articulos);
+    $can=0;
+    foreach($articulos as $articulo){
+      if($hoja!=$hojaAux){
+        $this->fpdf->AddPage();
+        $this->fpdf->SetFont('Times','', 14);    
+        $this->fpdf->Cell(0,10,"DOCUMENTO NO VALIDO COMO FACTURA",0,1,'C');
+        $this->fpdf->Cell(105,6,"Cacao & Vainilla",0,0);
+        $this->fpdf->Cell(105,6,"Fecha: XX/XX/XXXX",0,1);
+        $this->fpdf->Cell(105,6,"Sucursal",0,0);
+        $this->fpdf->Cell(105,6,"Comprobante numero",0,1);
+        $this->fpdf->Ln(1);
+        $this->fpdf->SetFont('Times','', 10); 
+        $this->fpdf->Cell(20,6,"Cant.",1,0,'C',true);
+        $this->fpdf->Cell(80,6,"Articulo",1,0,'C',true);
+        $this->fpdf->Cell(20,6,"Precio",1,0,"C",true);
+        $this->fpdf->Cell(20,6,"Importe",1,1,"C",true);
+        if($hoja!=1){
+          $this->fpdf->Cell(120,6,"TRANSPORTE",1,0,"L");
+          $this->fpdf->Cell(20,6,sprintf("$%5.2f",$total),1,1,"R");                
+        }
+        $hojaAux=$hoja;
+      };
+      $this->fpdf->Cell(20,6,sprintf("%02.2f Kg.",$articulo->cantidad),1,0,'R');
+      $this->fpdf->Cell(80,6,substr($articulo->articulo_nombre,0,40),1,0,'L');
+      $this->fpdf->Cell(20,6,sprintf("$%4.2f",$articulo->articulo_precio),1,0,'R');
+      $this->fpdf->Cell(20,6,sprintf("$%4.2f",$articulo->articulo_precio*$articulo->cantidad),1,1,'R');
+      //$this->fpdf->Cell(5,6,$renglon,1,1);
+      $renglon++;
+      $can++;
+      $total += $articulo->articulo_precio*$articulo->cantidad;
+      if($renglon>16){
+        $hoja++;
+        $renglon=0;
+        if($can<$canFin){
+          $this->fpdf->Cell(120,6,"TRANSPORTE",1,0,"L");
+          $this->fpdf->Cell(20,6,sprintf("$%5.2f",$total),1,1,"R");                
+        };
+      };
+    };
+    $this->fpdf->Cell(120,6,"TOTAL",1,0,"L");
+    $this->fpdf->Cell(20,6,sprintf("$%5.2f",$total),1,1,"R");                
     $file = TMP .'remito.pdf';
     $this->fpdf->AutoPrint(false);
     $this->fpdf->Output( $file,'I');

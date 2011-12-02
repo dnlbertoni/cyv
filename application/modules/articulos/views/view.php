@@ -12,12 +12,16 @@
   <?php echo form_label('Nombre:')?>
   <?php echo form_input('nombre', $articulo->nombre, 'id="nombre" class="text-Form"')?>
   <br />
+  <?php echo form_label('Articulo por Peso')?>
+  <?php echo form_input('peso', $articulo->peso, 'id="peso" class="num-Form"')?>
+  <br />
+  
   <?php echo form_label('Kg x Bulto:')?>
   <?php echo form_input('kg', $articulo->kg, 'id="kg" class="num-Form"')?>
   <br />
   <?php echo form_label('Costo x Kilo:')?>
   <?php echo form_input('costo', $articulo->costo, 'id="costo" class="num-Form"')?>
-  <br />
+  <br />  
   <?php echo form_label('Precio x Kilo:')?>
   <?php echo form_input('precio', $articulo->precio, 'id="precio" class="num-Form"')?>
   <?php echo form_close();?>
