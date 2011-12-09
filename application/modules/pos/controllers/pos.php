@@ -21,6 +21,8 @@ class Pos extends MY_Controller{
     $this->load->model('Sucursales_model');
     $this->load->model('Numerador_model');
     $this->load->model('Tmpmovim_model');
+	$this->load->model('Facencab_model');
+	$this->load->model('Facmovim_model');
   }
   /**
    * Pantalla de inicio de facturacion
@@ -80,6 +82,10 @@ class Pos extends MY_Controller{
   }
   function imprimoComprobante($puesto=false, $numero=false,$sucursal=false){
     $articulos=$this->Tmpmovim_model->toSave($puesto, $numero, $sucursal);
+	$importe = 0;
+	foreach($articulos as $articulo){
+		$importe += $articulo->importe;
+	};
     $datosEncab = array('tipcom'=>1,
                         'puesto'=>$puesto,
                         'numero'=>$numero,
@@ -88,7 +94,7 @@ class Pos extends MY_Controller{
                         'importe'=>$importe,
                         'estado'=>1
                         );
-    $idencab = $this->Facencab_model->add($datos);
+    $idencab = $this->Facencab_model->add($datosEncab);
     foreach($articulos as $articulo){
     $datosMovim[]= array( 'facencab_id' => $idencab,
                           'articulo_id' => $articulo->articulo_id,

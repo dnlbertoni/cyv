@@ -9,11 +9,11 @@ class Pdf extends MY_Controller{
     parent::__construct();
     $this->load->library('fpdf');
   }
-  function imprimoComprobante($puesto=false, $sucursal=false){
-    $puesto=($puesto)?$puesto:$this->input->post('puesto');
-    $sucursal=($sucursal)?$sucursal:$this->input->post('sucursal');
-    $this->load->model('Tmpmovim_model');
-    $articulos=$this->Tmpmovim_model->getDetalle($puesto,$sucursal);
+  function imprimoComprobante($idencab){
+    $idencab=($idencab)?$idencab:$this->input->post('idencab');
+	$this->load->model('Facmovim_model');
+    $articulos=$this->Facmovim_model->getComprobante($idencab);
+	print_r($articulos);
     $this->fpdf->Open();
     $this->fpdf->SetMargins(30,0,0);
     $this->fpdf->SetAutoPageBreak(true);
