@@ -19,6 +19,7 @@ class Articulos extends MY_Controller{
    */
   function index(){
     $data['articulos']=$this->Articulos_model->getAll();
+    Template::set_block('novedades', 'articulos/_novedades');
     Template::set($data);
     Template::render();
   }
