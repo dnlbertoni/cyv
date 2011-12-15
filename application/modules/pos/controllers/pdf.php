@@ -13,7 +13,6 @@ class Pdf extends MY_Controller{
     $idencab=($idencab)?$idencab:$this->input->post('idencab');
 	$this->load->model('Facmovim_model');
     $articulos=$this->Facmovim_model->getComprobante($idencab);
-	print_r($articulos);
     $this->fpdf->Open();
     $this->fpdf->SetMargins(30,0,0);
     $this->fpdf->SetAutoPageBreak(true);
@@ -32,9 +31,12 @@ class Pdf extends MY_Controller{
         $this->fpdf->SetFont('Times','', 14);    
         $this->fpdf->Cell(0,10,"DOCUMENTO NO VALIDO COMO FACTURA",0,1,'C');
         $this->fpdf->Cell(105,6,"Cacao & Vainilla",0,0);
-        $this->fpdf->Cell(105,6,"Fecha: XX/XX/XXXX",0,1);
-        $this->fpdf->Cell(105,6,"Sucursal",0,0);
-        $this->fpdf->Cell(105,6,"Comprobante numero",0,1);
+		$texto = sprintf("Fecha %s",$articulo->fecha);
+        $this->fpdf->Cell(105,6,$texto,0,1);
+		$texto = sprintf("Sucursal %s",$articulo->sucursal_id);
+        $this->fpdf->Cell(105,6,$texto,0,0);
+		$texto = sprintf("%s-%s",$articulo->puesto,$articulo->numero);
+        $this->fpdf->Cell(105,6,$texto,0,1);
         $this->fpdf->Ln(1);
         $this->fpdf->SetFont('Times','', 10); 
         $this->fpdf->Cell(20,6,"Cant.",1,0,'C',true);
@@ -48,13 +50,13 @@ class Pdf extends MY_Controller{
         $hojaAux=$hoja;
       };
       $this->fpdf->Cell(20,6,sprintf("%02.2f Kg.",$articulo->cantidad),1,0,'R');
-      $this->fpdf->Cell(80,6,substr($articulo->articulo_nombre,0,40),1,0,'L');
-      $this->fpdf->Cell(20,6,sprintf("$%4.2f",$articulo->articulo_precio),1,0,'R');
-      $this->fpdf->Cell(20,6,sprintf("$%4.2f",$articulo->articulo_precio*$articulo->cantidad),1,1,'R');
+      $this->fpdf->Cell(80,6,substr($articulo->nombre,0,40),1,0,'L');
+      $this->fpdf->Cell(20,6,sprintf("$%4.2f",$articulo->precio),1,0,'R');
+      $this->fpdf->Cell(20,6,sprintf("$%4.2f",$articulo->precio * $articulo->cantidad),1,1,'R');
       //$this->fpdf->Cell(5,6,$renglon,1,1);
       $renglon++;
       $can++;
-      $total += $articulo->articulo_precio*$articulo->cantidad;
+      $total += $articulo->precio * $articulo->cantidad;
       if($renglon>16){
         $hoja++;
         $renglon=0;

@@ -94,7 +94,9 @@ class Pos extends MY_Controller{
                         'importe'=>$importe,
                         'estado'=>1
                         );
-    $idencab = $this->Facencab_model->add($datosEncab);
+    $idencab = $this->Facencab_model->agregar($datosEncab);
+	if ($idencab)
+		$this->Numerador_model->nextRemito($this->puesto);
     foreach($articulos as $articulo){
     $datosMovim[]= array( 'facencab_id' => $idencab,
                           'articulo_id' => $articulo->articulo_id,
