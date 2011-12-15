@@ -1,7 +1,7 @@
 <h2 class="ui-widget-header">Articulos</h2>
 <ul class="ui-widget-content">
   <li><?php echo anchor('articulos/nuevo','Nuevo Articulo', "id='botAddArticulo'")?><?php echo anchor('articulos/nuevo','Nuevo Articulo')?></li>
-  <li><?php echo anchor('articulos/listaPrecios','Lista Precios', "id='botLista'")?><?php echo anchor('articulos/listaPrecios','Lista de Precios')?></li>
+  <li><?php echo anchor('articulos/pdf/listaPrecios','Lista Precios', "target='_blank' id='botLista'")?><?php echo anchor('articulos/pdf/listaPrecios','Lista de Precios', "target='_blank'")?></li>
 </ul>
 
 

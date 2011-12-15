@@ -10,7 +10,7 @@
 	<h2 class="title"><a href="#">Facturas Pendientes</a></h2>
 	<div class="entry">
 	  <?php foreach($sucursales as $sucursal):?>
-	    <?php echo anchor('pos/ctacte/pendientes'.$sucursal->id,$sucursal->nombre,'id="botPendientes" class="boton"')?>
+	    <?php echo anchor('pos/ctacte/pendientes/'.$sucursal->id,$sucursal->nombre,'id="botPendientes" class="boton"')?>
 	  <?php endforeach;?>
 	</div>
 </div>
