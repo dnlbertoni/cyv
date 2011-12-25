@@ -12,8 +12,12 @@
   <?php echo form_label('Nombre:')?>
   <?php echo form_input('nombre', $articulo->nombre, 'id="nombre" class="text-Form"')?>
   <br />
-  <?php echo form_label('Articulo por Peso')?>
-  <?php echo form_input('peso', $articulo->peso, 'id="peso" class="num-Form"')?>
+  <div id="rbPeso">
+    <?php echo form_label('Venta al Peso', 'peso1')?>  
+    <?php echo form_label('Venta x Unid', 'peso2')?>  
+    <?php echo form_radio('peso', 1, ($articulo->peso==1)?true:false, 'id=peso1')?>
+    <?php echo form_radio('peso', 0, ($articulo->peso==0)?true:false, 'id=peso2')?> 
+  </div>
   <br />
   
   <?php echo form_label('Kg x Bulto:')?>
@@ -34,6 +38,7 @@
 
 <script>
 $(document).ready(function(){
+  $("#rbPeso").buttonset();
   $("#Grabar").click(function(e){
     e.preventDefault();
     $("#articulo-form").submit();

@@ -53,7 +53,7 @@ class Articulos extends MY_Controller{
       };
     };
     $idArticulo = $this->Articulos_model->add($datos);
-    $this->ver($idArticulo);
+    Template::redirect('articulos/ver/'.$idArticulo);
   }
   /**
    * Editar articulo
@@ -102,6 +102,7 @@ class Articulos extends MY_Controller{
    * @param integer $id codigo articulo
    */
   function borrar($id){
-    
+    $this->Articulos_model->borrar($id);
+    $this->index();
   }
 }

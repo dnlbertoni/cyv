@@ -3,11 +3,13 @@
 -- http://www.phpmyadmin.net
 --
 -- Servidor: localhost
--- Tiempo de generación: 08-12-2011 a las 17:16:17
+-- Tiempo de generación: 26-12-2011 a las 12:22:01
 -- Versión del servidor: 5.0.51
 -- Versión de PHP: 5.2.6-1+lenny13
 
 SET SQL_MODE="NO_AUTO_VALUE_ON_ZERO";
+SET AUTOCOMMIT=0;
+START TRANSACTION;
 SET time_zone = "+00:00";
 
 
@@ -26,6 +28,7 @@ SET time_zone = "+00:00";
 -- Estructura de tabla para la tabla `articulos`
 --
 
+DROP TABLE IF EXISTS `articulos`;
 CREATE TABLE IF NOT EXISTS `articulos` (
   `id` bigint(20) NOT NULL auto_increment COMMENT 'id del articulo',
   `nombre` varchar(80) collate utf8_bin NOT NULL COMMENT 'descripcion del articulo',
@@ -40,7 +43,7 @@ CREATE TABLE IF NOT EXISTS `articulos` (
   KEY `nombre` (`nombre`),
   KEY `created` (`created`,`modificado`),
   KEY `users_id` (`users_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_bin COMMENT='tabla de articulos' AUTO_INCREMENT=9 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_bin COMMENT='tabla de articulos' AUTO_INCREMENT=11 ;
 
 --
 -- Volcado de datos para la tabla `articulos`
@@ -54,7 +57,8 @@ INSERT INTO `articulos` (`id`, `nombre`, `costo`, `precio`, `peso`, `kg`, `users
 (5, 'medialunas', '2.620', '5.000', 1, '1.00', 0, '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
 (6, 'CHINCHURRETE', '0.000', '20.000', 1, '2.50', 0, '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
 (7, 'TORTA DE NARANJA', '23.500', '25.000', 0, '1.00', 1, '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(8, 'TORTA DE NARANJA', '23.500', '25.000', 0, '1.00', 1, '0000-00-00 00:00:00', '0000-00-00 00:00:00');
+(8, 'TORTA DE NARANJA', '23.500', '25.000', 0, '1.00', 1, '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(10, 'TORTA DE COCO', '23.000', '25.000', 0, '1.00', 1, '0000-00-00 00:00:00', '0000-00-00 00:00:00');
 
 -- --------------------------------------------------------
 
@@ -62,6 +66,7 @@ INSERT INTO `articulos` (`id`, `nombre`, `costo`, `precio`, `peso`, `kg`, `users
 -- Estructura de tabla para la tabla `ci_sessions`
 --
 
+DROP TABLE IF EXISTS `ci_sessions`;
 CREATE TABLE IF NOT EXISTS `ci_sessions` (
   `session_id` varchar(40) collate utf8_bin NOT NULL default '0',
   `ip_address` varchar(16) collate utf8_bin NOT NULL default '0',
@@ -74,9 +79,36 @@ CREATE TABLE IF NOT EXISTS `ci_sessions` (
 -- --------------------------------------------------------
 
 --
+-- Estructura de tabla para la tabla `clientes`
+--
+
+DROP TABLE IF EXISTS `clientes`;
+CREATE TABLE IF NOT EXISTS `clientes` (
+  `id` int(11) NOT NULL auto_increment,
+  `direccion` varchar(40) collate utf8_bin NOT NULL COMMENT 'direccion',
+  `telefono` varchar(30) collate utf8_bin NOT NULL COMMENT 'telefono',
+  `apellido` varchar(20) collate utf8_bin NOT NULL,
+  `nombre` varchar(20) collate utf8_bin NOT NULL,
+  `fecnac` date NOT NULL,
+  `email` varchar(60) collate utf8_bin NOT NULL,
+  `sexo` int(11) NOT NULL,
+  PRIMARY KEY  (`id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_bin COMMENT='clientes' AUTO_INCREMENT=2 ;
+
+--
+-- Volcado de datos para la tabla `clientes`
+--
+
+INSERT INTO `clientes` (`id`, `direccion`, `telefono`, `apellido`, `nombre`, `fecnac`, `email`, `sexo`) VALUES
+(1, 'sgto cabral 180', '4213665', 'bertoni', 'daniel', '1978-11-15', 'daniel.bertoni@gmail.com', 1);
+
+-- --------------------------------------------------------
+
+--
 -- Estructura de tabla para la tabla `cuentas`
 --
 
+DROP TABLE IF EXISTS `cuentas`;
 CREATE TABLE IF NOT EXISTS `cuentas` (
   `id` int(11) NOT NULL COMMENT 'id de la cuenta',
   `nombre` varchar(80) collate utf8_bin NOT NULL COMMENT 'nombre de la cuenta',
@@ -93,13 +125,23 @@ CREATE TABLE IF NOT EXISTS `cuentas` (
 -- Estructura de tabla para la tabla `estadoscomp`
 --
 
+DROP TABLE IF EXISTS `estadoscomp`;
 CREATE TABLE IF NOT EXISTS `estadoscomp` (
   `id` int(3) NOT NULL auto_increment COMMENT 'id del estado',
   `nombre` varchar(30) collate utf8_bin NOT NULL COMMENT 'descripcion del estado',
   `abrev` char(8) collate utf8_bin NOT NULL COMMENT 'abreviatura de la descripcion',
   PRIMARY KEY  (`id`),
   KEY `nombre` (`nombre`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin COMMENT='tabla de estados de los comprobantes' AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_bin COMMENT='tabla de estados de los comprobantes' AUTO_INCREMENT=4 ;
+
+--
+-- Volcado de datos para la tabla `estadoscomp`
+--
+
+INSERT INTO `estadoscomp` (`id`, `nombre`, `abrev`) VALUES
+(1, 'Pendiente Cobro', 'PEND'),
+(2, 'Liquidado', 'LIQUID'),
+(3, 'Cobrado', 'COB');
 
 -- --------------------------------------------------------
 
@@ -107,6 +149,7 @@ CREATE TABLE IF NOT EXISTS `estadoscomp` (
 -- Estructura de tabla para la tabla `facencab`
 --
 
+DROP TABLE IF EXISTS `facencab`;
 CREATE TABLE IF NOT EXISTS `facencab` (
   `id` bigint(20) NOT NULL auto_increment COMMENT 'id del comprobante',
   `tipcom` int(11) NOT NULL COMMENT 'tipo comprobante: 1- remito 2 - liquidacion',
@@ -123,7 +166,14 @@ CREATE TABLE IF NOT EXISTS `facencab` (
   KEY `tipcom` (`tipcom`,`puesto`,`numero`,`fecha`,`estado`),
   KEY `cuenta_id` (`sucursal_id`),
   KEY `created` (`created`,`modificado`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin COMMENT='tabla de encabezado de comprobantes' AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_bin COMMENT='tabla de encabezado de comprobantes' AUTO_INCREMENT=2 ;
+
+--
+-- Volcado de datos para la tabla `facencab`
+--
+
+INSERT INTO `facencab` (`id`, `tipcom`, `puesto`, `numero`, `letra`, `fecha`, `sucursal_id`, `importe`, `estado`, `created`, `modificado`) VALUES
+(1, 1, 0001, 00000001, 'X', '2011-12-15 20:46:21', 1, '312.000', 1, '0000-00-00 00:00:00', '0000-00-00 00:00:00');
 
 -- --------------------------------------------------------
 
@@ -131,6 +181,7 @@ CREATE TABLE IF NOT EXISTS `facencab` (
 -- Estructura de tabla para la tabla `facmovim`
 --
 
+DROP TABLE IF EXISTS `facmovim`;
 CREATE TABLE IF NOT EXISTS `facmovim` (
   `id` bigint(20) NOT NULL COMMENT 'id del renglon',
   `facencab_id` bigint(20) unsigned NOT NULL COMMENT 'numero id del comprobante',
@@ -145,12 +196,57 @@ CREATE TABLE IF NOT EXISTS `facmovim` (
   KEY `facencab_id` (`facencab_id`,`articulo_id`,`created`,`modificado`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin COMMENT='tabla de renglones del comprobante';
 
+--
+-- Volcado de datos para la tabla `facmovim`
+--
+
+INSERT INTO `facmovim` (`id`, `facencab_id`, `articulo_id`, `cantidad`, `precio`, `costo`, `tasaiva`, `created`, `modificado`) VALUES
+(0, 1, 1, '5.20', '0.000', '2.300', '1.000', '0000-00-00 00:00:00', '0000-00-00 00:00:00');
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `insumos`
+--
+
+DROP TABLE IF EXISTS `insumos`;
+CREATE TABLE IF NOT EXISTS `insumos` (
+  `id` int(11) NOT NULL auto_increment,
+  `nombre` varchar(30) collate utf8_bin NOT NULL,
+  `stock` int(11) NOT NULL,
+  `stockMin` int(11) NOT NULL,
+  `estado` int(11) NOT NULL,
+  `created_at` int(11) NOT NULL,
+  `modify_at` timestamp NOT NULL default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP,
+  PRIMARY KEY  (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin COMMENT='tabla de insumos' AUTO_INCREMENT=1 ;
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `insumovim`
+--
+
+DROP TABLE IF EXISTS `insumovim`;
+CREATE TABLE IF NOT EXISTS `insumovim` (
+  `id` int(11) NOT NULL auto_increment,
+  `insumo_id` int(11) NOT NULL,
+  `tipcom` int(11) NOT NULL COMMENT '1 - compras | 2 - produccion',
+  `puesto` int(11) NOT NULL,
+  `numero` int(11) NOT NULL,
+  `fecha` date NOT NULL,
+  `cantidad` int(11) NOT NULL,
+  `estado` int(11) NOT NULL,
+  PRIMARY KEY  (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin COMMENT='movimientos de insumos' AUTO_INCREMENT=1 ;
+
 -- --------------------------------------------------------
 
 --
 -- Estructura de tabla para la tabla `login_attempts`
 --
 
+DROP TABLE IF EXISTS `login_attempts`;
 CREATE TABLE IF NOT EXISTS `login_attempts` (
   `id` int(11) NOT NULL auto_increment,
   `ip_address` varchar(40) collate utf8_bin NOT NULL,
@@ -165,6 +261,7 @@ CREATE TABLE IF NOT EXISTS `login_attempts` (
 -- Estructura de tabla para la tabla `numerador`
 --
 
+DROP TABLE IF EXISTS `numerador`;
 CREATE TABLE IF NOT EXISTS `numerador` (
   `tipcom` int(11) NOT NULL COMMENT '1 - Remitos | 2  - Liquidaciones',
   `puesto` int(11) NOT NULL,
@@ -176,7 +273,7 @@ CREATE TABLE IF NOT EXISTS `numerador` (
 --
 
 INSERT INTO `numerador` (`tipcom`, `puesto`, `numero`) VALUES
-(1, 1, 1);
+(1, 1, 2);
 
 -- --------------------------------------------------------
 
@@ -184,6 +281,7 @@ INSERT INTO `numerador` (`tipcom`, `puesto`, `numero`) VALUES
 -- Estructura de tabla para la tabla `sucursales`
 --
 
+DROP TABLE IF EXISTS `sucursales`;
 CREATE TABLE IF NOT EXISTS `sucursales` (
   `id` int(11) NOT NULL auto_increment COMMENT 'id de la sucursal',
   `nombre` varchar(80) collate utf8_bin NOT NULL COMMENT 'nombre identificacion sucursal',
@@ -206,6 +304,7 @@ INSERT INTO `sucursales` (`id`, `nombre`, `direccion`) VALUES
 -- Estructura de tabla para la tabla `tmpmovim`
 --
 
+DROP TABLE IF EXISTS `tmpmovim`;
 CREATE TABLE IF NOT EXISTS `tmpmovim` (
   `id` bigint(20) NOT NULL auto_increment,
   `puesto` int(4) NOT NULL,
@@ -238,6 +337,7 @@ INSERT INTO `tmpmovim` (`id`, `puesto`, `numero`, `sucursal`, `cantidad`, `artic
 -- Estructura de tabla para la tabla `users`
 --
 
+DROP TABLE IF EXISTS `users`;
 CREATE TABLE IF NOT EXISTS `users` (
   `id` int(11) NOT NULL auto_increment,
   `username` varchar(50) collate utf8_bin NOT NULL,
@@ -262,7 +362,7 @@ CREATE TABLE IF NOT EXISTS `users` (
 --
 
 INSERT INTO `users` (`id`, `username`, `password`, `email`, `activated`, `banned`, `ban_reason`, `new_password_key`, `new_password_requested`, `new_email`, `new_email_key`, `last_ip`, `last_login`, `created`, `modified`) VALUES
-(1, 'sistemas', '$P$Be/Nnvvex.4r.3WEmFwPCl8RpOmRQl.', 'dd@dd.com', 1, 0, NULL, NULL, NULL, NULL, NULL, '192.168.1.2', '2011-12-02 18:37:22', '2011-11-13 19:29:38', '2011-12-02 21:37:22');
+(1, 'sistemas', '$P$Be/Nnvvex.4r.3WEmFwPCl8RpOmRQl.', 'dd@dd.com', 1, 0, NULL, NULL, NULL, NULL, NULL, '192.168.1.2', '2011-12-25 21:16:33', '2011-11-13 19:29:38', '2011-12-26 00:16:33');
 
 -- --------------------------------------------------------
 
@@ -270,6 +370,7 @@ INSERT INTO `users` (`id`, `username`, `password`, `email`, `activated`, `banned
 -- Estructura de tabla para la tabla `user_autologin`
 --
 
+DROP TABLE IF EXISTS `user_autologin`;
 CREATE TABLE IF NOT EXISTS `user_autologin` (
   `key_id` char(32) collate utf8_bin NOT NULL,
   `user_id` int(11) NOT NULL default '0',
@@ -294,6 +395,7 @@ INSERT INTO `user_autologin` (`key_id`, `user_id`, `user_agent`, `last_ip`, `las
 -- Estructura de tabla para la tabla `user_profiles`
 --
 
+DROP TABLE IF EXISTS `user_profiles`;
 CREATE TABLE IF NOT EXISTS `user_profiles` (
   `id` int(11) NOT NULL auto_increment,
   `user_id` int(11) NOT NULL,
@@ -308,6 +410,7 @@ CREATE TABLE IF NOT EXISTS `user_profiles` (
 
 INSERT INTO `user_profiles` (`id`, `user_id`, `country`, `website`) VALUES
 (1, 1, NULL, NULL);
+COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
