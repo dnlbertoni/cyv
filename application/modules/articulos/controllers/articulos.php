@@ -28,7 +28,7 @@ class Articulos extends MY_Controller{
    */
   function nuevo(){
     $articulo = array( 'nombre'=>'',
-                       'costo'=>0,
+                       'publico'=>0,
                        'peso'=>0,
                        'kg'=>1,
                        'precio'=>0,

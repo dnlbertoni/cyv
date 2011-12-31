@@ -32,8 +32,9 @@ Released   : 20110807
 			<div id="menu">
 				<ul>
 					<li <?php echo check_class('inicio') ?>><?php echo anchor('inicio', 'Inicio')?></li>
+					<li <?php echo check_class('clientes') ?>><?php echo anchor('clientes', 'Clientes')?></li>
 					<li <?php echo check_class('articulos') ?>><?php echo anchor('articulos', 'Articulos')?></li>
-					<li <?php echo check_class('pos') ?>><?php echo anchor('pos', 'Punto de Venta')?></li>
+					<li <?php echo check_class('pos') ?>><?php echo anchor('pos', 'Ventas')?></li>
 					<li <?php echo check_class('insumos') ?>><?php echo anchor('insumos', 'Insumos')?></li>
 					<li <?php echo check_class('informes') ?>><?php echo anchor('informes', 'Informes')?></li>
 				</ul>

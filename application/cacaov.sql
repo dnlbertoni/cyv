@@ -3,13 +3,11 @@
 -- http://www.phpmyadmin.net
 --
 -- Servidor: localhost
--- Tiempo de generación: 26-12-2011 a las 12:22:01
+-- Tiempo de generación: 31-12-2011 a las 21:02:02
 -- Versión del servidor: 5.0.51
 -- Versión de PHP: 5.2.6-1+lenny13
 
 SET SQL_MODE="NO_AUTO_VALUE_ON_ZERO";
-SET AUTOCOMMIT=0;
-START TRANSACTION;
 SET time_zone = "+00:00";
 
 
@@ -32,7 +30,7 @@ DROP TABLE IF EXISTS `articulos`;
 CREATE TABLE IF NOT EXISTS `articulos` (
   `id` bigint(20) NOT NULL auto_increment COMMENT 'id del articulo',
   `nombre` varchar(80) collate utf8_bin NOT NULL COMMENT 'descripcion del articulo',
-  `costo` decimal(8,3) default NULL COMMENT 'costo del articulo',
+  `publico` decimal(8,3) default NULL COMMENT 'precio al publico',
   `precio` decimal(8,3) default NULL COMMENT 'precio de lista del articulo',
   `peso` tinyint(1) NOT NULL default '1' COMMENT 'si es por peso o por unidad',
   `kg` decimal(4,2) default '1.00' COMMENT 'kg por lata / bulto',
@@ -49,8 +47,8 @@ CREATE TABLE IF NOT EXISTS `articulos` (
 -- Volcado de datos para la tabla `articulos`
 --
 
-INSERT INTO `articulos` (`id`, `nombre`, `costo`, `precio`, `peso`, `kg`, `users_id`, `created`, `modificado`) VALUES
-(1, 'PAN', '2.300', '5.200', 1, '1.00', 1, '0000-00-00 00:00:00', '2011-11-14 04:18:45'),
+INSERT INTO `articulos` (`id`, `nombre`, `publico`, `precio`, `peso`, `kg`, `users_id`, `created`, `modificado`) VALUES
+(1, 'PAN', '6.200', '5.000', 1, '1.00', 1, '0000-00-00 00:00:00', '2011-12-31 23:22:10'),
 (2, 'TORTA DE CHOCOLATE ', '15.600', '23.500', 1, '1.00', 1, '0000-00-00 00:00:00', '2011-11-14 04:22:53'),
 (3, 'lemon Pie', '13.200', '23.500', 1, '1.00', 0, '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
 (4, 'medialunas', '2.620', '5.000', 1, '1.00', 0, '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
@@ -188,7 +186,7 @@ CREATE TABLE IF NOT EXISTS `facmovim` (
   `articulo_id` bigint(20) unsigned NOT NULL COMMENT 'numero de aritculo',
   `cantidad` decimal(5,2) unsigned NOT NULL COMMENT 'cantidad facturada',
   `precio` decimal(8,3) NOT NULL COMMENT 'precio al momento de la facturacion',
-  `costo` decimal(8,3) default '0.000' COMMENT 'costo al momento de la facturacion',
+  `publico` decimal(8,3) default '0.000' COMMENT 'Precio al publico al momento de la facturacion',
   `tasaiva` decimal(5,3) NOT NULL COMMENT 'tasa de iva',
   `created` datetime NOT NULL COMMENT 'fecha de creacion del registro',
   `modificado` timestamp NOT NULL default '0000-00-00 00:00:00' on update CURRENT_TIMESTAMP COMMENT 'fecha de modificacion',
@@ -200,7 +198,7 @@ CREATE TABLE IF NOT EXISTS `facmovim` (
 -- Volcado de datos para la tabla `facmovim`
 --
 
-INSERT INTO `facmovim` (`id`, `facencab_id`, `articulo_id`, `cantidad`, `precio`, `costo`, `tasaiva`, `created`, `modificado`) VALUES
+INSERT INTO `facmovim` (`id`, `facencab_id`, `articulo_id`, `cantidad`, `precio`, `publico`, `tasaiva`, `created`, `modificado`) VALUES
 (0, 1, 1, '5.20', '0.000', '2.300', '1.000', '0000-00-00 00:00:00', '0000-00-00 00:00:00');
 
 -- --------------------------------------------------------
@@ -362,7 +360,7 @@ CREATE TABLE IF NOT EXISTS `users` (
 --
 
 INSERT INTO `users` (`id`, `username`, `password`, `email`, `activated`, `banned`, `ban_reason`, `new_password_key`, `new_password_requested`, `new_email`, `new_email_key`, `last_ip`, `last_login`, `created`, `modified`) VALUES
-(1, 'sistemas', '$P$Be/Nnvvex.4r.3WEmFwPCl8RpOmRQl.', 'dd@dd.com', 1, 0, NULL, NULL, NULL, NULL, NULL, '192.168.1.2', '2011-12-25 21:16:33', '2011-11-13 19:29:38', '2011-12-26 00:16:33');
+(1, 'sistemas', '$P$Be/Nnvvex.4r.3WEmFwPCl8RpOmRQl.', 'dd@dd.com', 1, 0, NULL, NULL, NULL, NULL, NULL, '192.168.1.2', '2011-12-31 19:02:54', '2011-11-13 19:29:38', '2011-12-31 22:02:54');
 
 -- --------------------------------------------------------
 
@@ -410,7 +408,6 @@ CREATE TABLE IF NOT EXISTS `user_profiles` (
 
 INSERT INTO `user_profiles` (`id`, `user_id`, `country`, `website`) VALUES
 (1, 1, NULL, NULL);
-COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
