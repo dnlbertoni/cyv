@@ -103,6 +103,6 @@ class Articulos extends MY_Controller{
    */
   function borrar($id){
     $this->Articulos_model->borrar($id);
-    $this->index();
+    Template::redirect('articulos/index');
   }
 }
