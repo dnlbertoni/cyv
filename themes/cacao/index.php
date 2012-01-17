@@ -56,6 +56,7 @@ Released   : 20110807
 						<li>
                           <?php echo Template::block('novedades');?>
 						</li>
+                      <li>&nbsp;</li>
 						<li>
                           <?php echo Template::block('fast');?>
 						</li>
