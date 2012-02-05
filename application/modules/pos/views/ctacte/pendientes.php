@@ -24,12 +24,20 @@
   <td>
     <?php echo "$ ".$f->importe?>
   </td>
+  <td>
+    <?php echo anchor('pos/pdf/imprimoComprobante/'.$f->id, 'Reimprimir', 'target="_blank" class="botPrint"');?>
+  </td>
 </tr>
 <?php $total += $f->importe?>
 <?php endforeach; ?>
 <tr>
-<th>Total</th>
-<th><?php echo $total?></th>
+<th colspan="2">Total</th>
+<th><?php echo sprintf("$%8.3f",$total)?></th>
 </tr>
 </table>
 
+<script>
+$(document).ready(function(){
+  $(".botPrint").button({icons:{primary:'ui-icon-print'}, text:false});
+});
+</script>

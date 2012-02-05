@@ -15,7 +15,7 @@ class Tmpmovim_model extends MY_Model{
     $this->db->select('articulo as articulo_id');
     $this->db->select('articulos.nombre as articulo_nombre');
     $this->db->select('tmpmovim.precio as articulo_precio');
-    $this->db->select('articulos.costo as articulo_costo');
+    $this->db->select('articulos.publico as articulo_publico');
     $this->db->select('tmpmovim.precio as articulo_precio');
     $this->db->select('tmpmovim.precio * cantidad as importe');
     $this->db->from($this->getTable());
@@ -36,7 +36,7 @@ class Tmpmovim_model extends MY_Model{
     $this->db->select('cantidad');
     $this->db->select('articulo as articulo_id');
     $this->db->select('tmpmovim.precio as articulo_precio');
-    $this->db->select('articulos.costo as articulo_costo');
+    $this->db->select('articulos.publico as articulo_publico');
     $this->db->select('tmpmovim.precio as articulo_precio');
     $this->db->select('tmpmovim.precio * cantidad as importe');
     $this->db->from($this->getTable());

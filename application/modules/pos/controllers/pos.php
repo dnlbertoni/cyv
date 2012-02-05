@@ -100,8 +100,9 @@ class Pos extends MY_Controller{
     foreach($articulos as $articulo){
     $datosMovim[]= array( 'facencab_id' => $idencab,
                           'articulo_id' => $articulo->articulo_id,
-                          'cantidad'    => $articulo->articulo_precio,
-                          'costo'       => $articulo->articulo_costo,
+                          'cantidad'    => $articulo->cantidad,
+                          'precio'      => $articulo->articulo_precio,
+                          'publico'     => $articulo->articulo_publico,
                           'tasaiva'     => 1
                         );
     }

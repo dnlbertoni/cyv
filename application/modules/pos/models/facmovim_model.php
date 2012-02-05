@@ -15,10 +15,12 @@ class Facmovim_model extends MY_Model{
 		$this->db->select('facencab.fecha as fecha');
 		$this->db->select('facencab.puesto as puesto');
 		$this->db->select('facencab.numero as numero');
+		$this->db->select('facencab.sucursal_id as sucursal_id');
 		$this->db->select('sucursales.nombre as sucursal_nombre');
 		$this->db->select('facmovim.articulo_id as articulo_id');
 		$this->db->select('articulos.nombre as articulo_nombre');
 		$this->db->select('facmovim.cantidad as cantidad');
+        $this->db->select('facmovim.publico as publico');
 		$this->db->select('facmovim.precio as precio');
 		$this->db->select('facmovim.precio * facmovim.cantidad as importe');
 		$this->db->select('facencab.importe as total');

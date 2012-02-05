@@ -9,7 +9,7 @@ class Pdf extends MY_Controller{
     parent::__construct();
     $this->load->library('fpdf');
   }
-  function imprimoComprobante($idencab){
+  function imprimoComprobante($idencab=false){
     $idencab=($idencab)?$idencab:$this->input->post('idencab');
 	$this->load->model('Facmovim_model');
     $articulos=$this->Facmovim_model->getComprobante($idencab);
@@ -50,7 +50,7 @@ class Pdf extends MY_Controller{
         $hojaAux=$hoja;
       };
       $this->fpdf->Cell(20,6,sprintf("%02.2f Kg.",$articulo->cantidad),1,0,'R');
-      $this->fpdf->Cell(80,6,substr($articulo->nombre,0,40),1,0,'L');
+      $this->fpdf->Cell(80,6,substr($articulo->articulo_nombre,0,40),1,0,'L');
       $this->fpdf->Cell(20,6,sprintf("$%4.2f",$articulo->precio),1,0,'R');
       $this->fpdf->Cell(20,6,sprintf("$%4.2f",$articulo->precio * $articulo->cantidad),1,1,'R');
       //$this->fpdf->Cell(5,6,$renglon,1,1);
@@ -69,7 +69,7 @@ class Pdf extends MY_Controller{
     $this->fpdf->Cell(120,6,"TOTAL",1,0,"L");
     $this->fpdf->Cell(20,6,sprintf("$%5.2f",$total),1,1,"R");                
     $file = TMP .'remito.pdf';
-    $this->fpdf->AutoPrint(false);
+    //$this->fpdf->AutoPrint(false);
     $this->fpdf->Output( $file,'I');
   }
 }

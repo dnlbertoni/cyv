@@ -142,6 +142,7 @@ function AgregoArticulo(e){
                $("#articulo").val('');
                $("#cantidad").focus();
                $("#loading").fadeOut(100);
+               $("#carga").hide();
             }
     }).responseText;
   }
