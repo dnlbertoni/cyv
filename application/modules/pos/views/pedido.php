@@ -1,7 +1,7 @@
 <h2>Pedido sucursal -- <?php echo $sucursal?></h2>
 <div class="post">
   <p class="meta">
-    <span class="date"><?php echo $fecha?></span><span class="posted"><?php echo $comprobante?></span>
+    <span class="date"><?php echo form_input('fecha',$fecha,'id="fecha"')?></span><span class="posted"><?php echo $comprobante?></span>
   </p>
 </div>
   <div style="clear: both;">&nbsp;</div>
@@ -129,9 +129,9 @@ function AgregoArticulo(e){
             type: "POST",
             data: ({articulo : articulo,
                     cantidad : cantidad,
-                    puesto : puesto,
+                    puesto   : puesto,
                     sucursal : sucursal,
-                    numero : numero
+                    numero   : numero
                   }),
             dataType: "html",
             async:false,
@@ -155,7 +155,7 @@ function getSpecialKey(code){
   }
 }
 function ConsultoArticulo(){
-  var urlConsulta = <?php echo "'".base_url()."/index.php/articulos/consultaPos'"?>;
+  var urlConsulta = <?php echo "'".base_url()."index.php/articulos/consultaPos'"?>;
   var dialogOpts  = {
         modal: true,
         bgiframe: true,
@@ -275,6 +275,7 @@ function ImprimoTicket(){
 function muestroDetalles(){
     puesto       = $("#puesto").val();
     sucursal     = $("#sucursal").val();
+	numero       = $("#numero").val();
     pagina       = <?php echo $paginaDet?>;
     $.ajax({
             url: pagina,
@@ -282,7 +283,8 @@ function muestroDetalles(){
             global: false,
             type: "POST",
             data: ({
-                    puesto : puesto,
+                    puesto   : puesto,
+					numero   : numero, 
                     sucursal : sucursal
                   }),
             dataType: "html",

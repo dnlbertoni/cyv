@@ -29,11 +29,11 @@ class Pdf extends MY_Controller{
       if($hoja!=$hojaAux){
         $this->fpdf->AddPage();
         $this->fpdf->SetFont('Times','', 14);    
-        $this->fpdf->Cell(0,10,"DOCUMENTO NO VALIDO COMO FACTURA",0,1,'C');
-        $this->fpdf->Cell(105,6,"Cacao & Vainilla",0,0);
-		$texto = sprintf("Fecha %s",$articulo->fecha);
-        $this->fpdf->Cell(105,6,$texto,0,1);
-		$texto = sprintf("Sucursal %s",$articulo->sucursal_id);
+        //$this->fpdf->Cell(0,10,"DOCUMENTO NO VALIDO COMO FACTURA",0,1,'C');
+        //$this->fpdf->Cell(105,6,"Cacao & Vainilla",0,0);
+		//$texto = sprintf("Fecha %s",$articulo->fecha);
+        //$this->fpdf->Cell(105,6,$texto,0,1);
+		$texto = sprintf("Sucursal %s - %s",$articulo->sucursal_id, $articulo->sucursal_nombre);
         $this->fpdf->Cell(105,6,$texto,0,0);
 		$texto = sprintf("%s-%s",$articulo->puesto,$articulo->numero);
         $this->fpdf->Cell(105,6,$texto,0,1);

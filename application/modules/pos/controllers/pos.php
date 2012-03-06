@@ -43,17 +43,19 @@ class Pos extends MY_Controller{
     $data['comprobante']=sprintf("%04.0f-%08.0f", $this->puesto, $numero);
     $data['puesto']=$this->puesto;
     $data['numero']=$numero;
-    $data['pagina']=base_url().'/index.php/pos/addArticulo';
-    $data['paginaDet']="'".base_url().'/index.php/pos/muestroDetalle'."'";
-    $data['paginaDel']="'".base_url().'/index.php/pos/vacioTMP'."'";
+    $data['pagina']=base_url().'index.php/pos/addArticulo';
+    $data['paginaDet']="'".base_url().'index.php/pos/muestroDetalle'."'";
+    $data['paginaDel']="'".base_url().'index.php/pos/vacioTMP'."'";
     $data['ocultos']=array('fecha'=>$fechoy->format(" d/m/Y"));
     Template::set_block('novedades', 'pos/_novPedidos');
     Template::set($data);
     Template::render();
   }
   function addArticulo(){
+	$fecha=explode('/',$this->input->post('fecha'));
     $articulo = $this->Articulos_model->getById($this->input->post('articulo'));
     $datos['puesto']  =$this->input->post('puesto');
+    //$datos['fecha']   =$fecha[2].'-'.$fecha[1].'-'.$fecha[0];
     $datos['sucursal']=$this->input->post('sucursal');
     $datos['numero']  =$this->input->post('numero');
     $datos['cantidad']=$this->input->post('cantidad')*$articulo->kg;
