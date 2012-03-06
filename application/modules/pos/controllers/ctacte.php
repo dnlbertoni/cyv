@@ -19,8 +19,9 @@ class Ctacte extends MY_Controller{
     Template::render();
   }
   function borroComprobante($id=false){
-    if(!$id){
-      $this->redirect('/pos', 'location',301);
-    }
+    $this->load->model('Facencab_model');
+    $this->load->model('Facmovim_model');
+    $this->Facencab_model->borro($id);
+    $this->Facmovim_model->borro($id);
   }
 }
