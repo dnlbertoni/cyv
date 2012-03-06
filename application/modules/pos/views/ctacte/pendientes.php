@@ -26,6 +26,7 @@
   </td>
   <td>
     <?php echo anchor('pos/pdf/imprimoComprobante/'.$f->id, 'Reimprimir', 'target="_blank" class="botPrint"');?>
+    <?php echo anchor('pos/ctacte/borroComprobante/'.$f->id, 'Borrar', 'class="botDel"');?>
   </td>
 </tr>
 <?php $total += $f->importe?>
@@ -39,5 +40,6 @@
 <script>
 $(document).ready(function(){
   $(".botPrint").button({icons:{primary:'ui-icon-print'}, text:false});
+  $(".botDel").button({icons:{primary:'ui-icon-trash'}, text:false});
 });
 </script>

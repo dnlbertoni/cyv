@@ -18,4 +18,9 @@ class Ctacte extends MY_Controller{
     Template::set($data);
     Template::render();
   }
+  function borroComprobante($id=false){
+    if(!$id){
+      $this->redirect('/pos', 'location',301);
+    }
+  }
 }
