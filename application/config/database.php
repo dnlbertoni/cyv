@@ -43,7 +43,7 @@ $active_record = TRUE;
 
 $db['default']['hostname'] = 'localhost';
 $db['default']['username'] = 'sistemas';
-$db['default']['password'] = 'cacao2012';
+$db['default']['password'] = '';
 $db['default']['database'] = 'cacaov';
 $db['default']['dbdriver'] = 'mysql';
 $db['default']['dbprefix'] = '';
